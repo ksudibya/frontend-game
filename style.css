@@ -1,0 +1,46 @@
+.title {
+  font-size: 28;
+  font-weight: 800;
+  text-align: center;
+}
+
+.score {
+  font-size: 20;
+  font-weight: 800;
+  color: blue;
+  text-align: center;
+}
+
+.total-score {
+  display: none;
+}
+
+.display-start {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.start {
+  background-color: green;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+}
+
+.quiz {
+  background-color: azure;
+  padding: 2rem;
+  margin: 2rem;
+  display: none;
+}
+
+button {
+  font-size: 24px;
+  background-color: aliceblue;
+  margin-right: 2rem;
+  margin-bottom: 2rem;
+}
