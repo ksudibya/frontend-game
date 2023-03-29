@@ -6,42 +6,55 @@
  4. save result correct or incorrect
  5. show result score
  */
-
+//display start button
 const userAction = async () => {
   const displayStart = document.getElementsByClassName("display-start");
   displayStart[0].style.display = "none";
-  const response = await fetch(
-    "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
-  );
-  const myJson = await response.json(); //extract JSON from the http response
 
+  // Call API from opendb trivia
+  const response = await fetch(
+    "https://opentdb.com/api.php?amount=20&category=9&difficulty=easy&type=multiple"
+  );
+  // extract JSON from the http response
+  const myJson = await response.json();
+  // to confirm we get data from the API
   console.log(myJson);
 
   const charactersDiv = document.querySelector("#trivia");
+
   let attempt = 0;
   let score = 0;
 
   myJson.results.forEach((q, index) => {
+    const elementTotalScore = document.getElementsByClassName("total-score");
+    elementTotalScore[0].style.display = "none";
+    const elementScore = document.getElementsByClassName("score");
+    // to confirm that score is empty
+    elementScore[0].innerHTML = "";
+    // create element div as a place holder [q]
     const questionElement = document.createElement("div");
+    // create element [h1] to render questions
     const titleElement = document.createElement("h1");
     titleElement.innerText = `Question  ${index + 1} `;
+    questionElement.append(titleElement);
     const characterElement = document.createElement("h2");
 
     characterElement.innerHTML = q.question;
-    questionElement.append(titleElement);
     questionElement.append(characterElement);
 
-    //put answers into an array
     let answers = [];
     answers.push(q.correct_answer);
+
     q.incorrect_answers.forEach((i) => {
       answers.push(i);
     });
-    // shuffle answers
+
     shuffle(answers);
+
     //create buttons for answers
     answers.forEach((i, indexButton) => {
       const allAnswers = document.createElement("button");
+
       let identifierButton;
       if (indexButton === 0) {
         identifierButton = "a.";
@@ -52,37 +65,42 @@ const userAction = async () => {
       } else {
         identifierButton = "d.";
       }
+
       allAnswers.innerHTML = `${identifierButton} ${i}`;
+
       allAnswers.onclick = function () {
         const nextQuestion = document.getElementsByClassName("quiz");
-        const elementScore = document.getElementsByClassName("score");
-        // const elementButton = document
-        //   .getElementsByTagName("button")
-        //   .contains(i);
-        const elementTotalScore =
-          document.getElementsByClassName("total-score");
+
         let tempScore = 0;
+        // correct on the first try, assign score = 10
         if (attempt == 0) {
           tempScore = 10;
+          // correct on the second try, assign score = 7
         } else if (attempt == 1) {
           tempScore = 7;
+          // correct on the third try, assign score = 3
         } else if (attempt == 2) {
           tempScore = 3;
+          // correct on the fourth try, assign score = 0
         } else {
           tempScore = 0;
         }
+
         if (i == q.correct_answer) {
           score = score + tempScore;
+
           attempt = 0;
 
-          if (index == myJson.results.length) {
-             displayStart[0].style.display = "block";
+          if (index == 9) {
             elementTotalScore[0].style.display = "block";
           }
+
           console.log(`you get ${tempScore} points, total score ${score}`);
 
-          elementScore[0].innerHTML = score;
+          elementScore[0].innerHTML = `You get ${tempScore} points. Your total score is: ${score} pts`;
+
           nextQuestion[index].style.display = "none";
+
           if (index == myJson.results.length) {
             return false;
           } else {
@@ -93,25 +111,24 @@ const userAction = async () => {
           return false;
         } else {
           attempt = attempt + 1;
+
           alert(`Incorrect Answer`);
-          // show again when finish or end quiz
-          if (index == myJson.results.length) {
-            elementTotalScore[0].style.display = "block";
-             displayStart[0].style.display = "block";
-          }
-          // nextQuestion[index].innerHTML += "Incorrect";
-          // elementButton.style.backgroundColor = "red";
-          console.log(`score incorrect ${indexButton} ${score}`);
+
+          // console.log(`score incorrect ${indexButton} ${score}`);
+
           return false;
         }
       };
+
       questionElement.appendChild(allAnswers);
     });
 
     questionElement.classList.add("quiz");
+
     if (index == 0) {
       questionElement.style.display = "block";
     }
+
     charactersDiv.appendChild(questionElement);
   });
 };
@@ -120,9 +137,7 @@ function shuffle(array) {
   let currentIndex = array.length,
     randomIndex;
 
-  //randomize elements.
   while (currentIndex != 0) {
-    // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 

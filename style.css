@@ -13,22 +13,28 @@
 
 .total-score {
   display: none;
+  margin: 0;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .display-start {
   margin: 0;
   position: absolute;
-  top: 50%;
+  top: 25%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 
 .start {
-  background-color: green;
+  background-color: cadetblue;
   color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 1rem;
+  padding: 0.75rem 3.5rem;
+  border-radius: 1.5rem;
 }
 
 .quiz {
@@ -43,4 +49,5 @@ button {
   background-color: aliceblue;
   margin-right: 2rem;
   margin-bottom: 2rem;
+  border-radius: 15px;
 }
