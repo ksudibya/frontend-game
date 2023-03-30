@@ -13,7 +13,7 @@ const userAction = async () => {
 
   // Call API from opendb trivia
   const response = await fetch(
-    "https://opentdb.com/api.php?amount=20&category=9&difficulty=easy&type=multiple"
+    "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
   );
   // extract JSON from the http response
   const myJson = await response.json();
@@ -25,22 +25,24 @@ const userAction = async () => {
   let attempt = 0;
   let score = 0;
 
+  //function to loop results from API
   myJson.results.forEach((q, index) => {
     const elementTotalScore = document.getElementsByClassName("total-score");
+    //to hide return button
     elementTotalScore[0].style.display = "none";
     const elementScore = document.getElementsByClassName("score");
-    // to confirm that score is empty
+    // to set elementScore to nothing when start
     elementScore[0].innerHTML = "";
     // create element div as a place holder [q]
     const questionElement = document.createElement("div");
-    // create element [h1] to render questions
-    const titleElement = document.createElement("h1");
-    titleElement.innerText = `Question  ${index + 1} `;
-    questionElement.append(titleElement);
-    const characterElement = document.createElement("h2");
-
-    characterElement.innerHTML = q.question;
-    questionElement.append(characterElement);
+    // create element [h1]
+    const h1 = document.createElement("h1");
+    h1.innerText = `Question  ${index + 1} `;
+    questionElement.append(h1);
+    //create element h2 to show questions
+    const h2 = document.createElement("h2");
+    h2.innerHTML = q.question;
+    questionElement.append(h2);
 
     let answers = [];
     answers.push(q.correct_answer);
@@ -69,7 +71,7 @@ const userAction = async () => {
       allAnswers.innerHTML = `${identifierButton} ${i}`;
 
       allAnswers.onclick = function () {
-        const nextQuestion = document.getElementsByClassName("quiz");
+        const currentQuestion = document.getElementsByClassName("quiz");
 
         let tempScore = 0;
         // correct on the first try, assign score = 10
@@ -85,10 +87,10 @@ const userAction = async () => {
         } else {
           tempScore = 0;
         }
-
+        //when user choose the correct answer add score
         if (i == q.correct_answer) {
           score = score + tempScore;
-
+          //reset attempt to 0
           attempt = 0;
 
           if (index == 9) {
@@ -98,14 +100,16 @@ const userAction = async () => {
           console.log(`you get ${tempScore} points, total score ${score}`);
 
           elementScore[0].innerHTML = `You get ${tempScore} points. Your total score is: ${score} pts`;
-
-          nextQuestion[index].style.display = "none";
-
+          //hide current question
+          currentQuestion[index].style.display = "none";
+          //when we get to last index do not show anything
           if (index == myJson.results.length) {
             return false;
           } else {
-            if (index + 1 < nextQuestion.length)
-              nextQuestion[index + 1].style.display = "block";
+            //when index + 1 is less than numbers of questions
+            if (index + 1 < currentQuestion.length)
+              //show next question
+              currentQuestion[index + 1].style.display = "block";
           }
 
           return false;
@@ -114,21 +118,21 @@ const userAction = async () => {
 
           alert(`Incorrect Answer`);
 
-          // console.log(`score incorrect ${indexButton} ${score}`);
+          //console.log(`score incorrect ${indexButton} ${score}`);
 
           return false;
         }
       };
-
+      //show answer button in the questionElement
       questionElement.appendChild(allAnswers);
     });
-
+    //add class "quiz" css into questionElement
     questionElement.classList.add("quiz");
-
+    //when question at first index change display none to block
     if (index == 0) {
       questionElement.style.display = "block";
     }
-
+    //show questionElement
     charactersDiv.appendChild(questionElement);
   });
 };
@@ -141,12 +145,12 @@ function shuffle(array) {
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
-    // And swap it with the current element.
+    // And swap currentIndex with randomIndex.
     [array[currentIndex], array[randomIndex]] = [
       array[randomIndex],
       array[currentIndex],
     ];
   }
 
-  return array;
+  //return array;
 }
